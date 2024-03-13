@@ -39,9 +39,7 @@ describe('WardenAirdropClaim fail', () => {
     const userProof = tree.getHexProof(
       ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
     );
-    await expect(wardenAirdrop.connect(user).claim(wrongUserAmount, userProof)).to.be.revertedWith(
-      'Proof failed'
-    );
+    await expect(wardenAirdrop.connect(user).claim(wrongUserAmount, userProof)).to.be.revertedWith('Proof failed');
   });
 
   it('claim correct amount with wrong proof', async () => {
@@ -59,9 +57,7 @@ describe('WardenAirdropClaim fail', () => {
     const userProof = tree.getHexProof(
       ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, wrongUserAmount])
     );
-    await expect(wardenAirdrop.connect(user).claim(userAmount, userProof)).to.be.revertedWith(
-      'Proof failed'
-    );
+    await expect(wardenAirdrop.connect(user).claim(userAmount, userProof)).to.be.revertedWith('Proof failed');
   });
 
   it('claim wrong amount with wrong proof', async () => {
@@ -79,9 +75,7 @@ describe('WardenAirdropClaim fail', () => {
     const userProof = tree.getHexProof(
       ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, wrongUserAmount])
     );
-    await expect(wardenAirdrop.connect(user).claim(wrongUserAmount, userProof)).to.be.revertedWith(
-      'Proof failed'
-    );
+    await expect(wardenAirdrop.connect(user).claim(wrongUserAmount, userProof)).to.be.revertedWith('Proof failed');
   });
 
   it('claim twice without root update', async () => {
