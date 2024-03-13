@@ -5,7 +5,7 @@ import { createAirdrop } from '../shared/fixtures';
 import { constructMerkleTree, generateRandomAirdropData } from '../shared/utils';
 import { parseUnits } from 'ethers/lib/utils';
 
-describe('WardenAirdrop', () => {
+describe('WardenAirdrop gas', () => {
   it('claim gas', async () => {
     const { wardenAirdrop, owner } = await loadFixture(createAirdrop);
     const [_, user] = await ethers.getSigners();
