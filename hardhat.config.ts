@@ -13,7 +13,7 @@ const config = {
     },
   },
   mocha: {
-    timeout: 200_000,
+    timeout: 2_000_000,
   },
   contractSizer: {
     alphaSort: true,

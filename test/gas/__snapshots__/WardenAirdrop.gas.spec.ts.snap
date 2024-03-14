@@ -1,27 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`WardenAirdrop claim gas 1`] = `
+exports[`WardenAirdrop gas claim gas 100 eligible users 1`] = `
 Object {
   "calldataByteLength": 324,
-  "gasUsed": 95632,
+  "gasUsed": 95690,
 }
 `;
 
-exports[`WardenAirdrop updateRoot gas 100 users 1`] = `
+exports[`WardenAirdrop gas claim gas 1000 eligible users 1`] = `
+Object {
+  "calldataByteLength": 420,
+  "gasUsed": 98247,
+}
+`;
+
+exports[`WardenAirdrop gas claim gas 10000 eligible users 1`] = `
+Object {
+  "calldataByteLength": 548,
+  "gasUsed": 102137,
+}
+`;
+
+exports[`WardenAirdrop gas claim gas 50000 eligible users 1`] = `
+Object {
+  "calldataByteLength": 612,
+  "gasUsed": 103919,
+}
+`;
+
+exports[`WardenAirdrop gas updateRoot gas 100 users 1`] = `
 Object {
   "calldataByteLength": 36,
   "gasUsed": 47141,
 }
 `;
 
-exports[`WardenAirdrop updateRoot gas 1000 users 1`] = `
+exports[`WardenAirdrop gas updateRoot gas 1000 users 1`] = `
 Object {
   "calldataByteLength": 36,
   "gasUsed": 47141,
 }
 `;
 
-exports[`WardenAirdrop updateRoot gas 10000 users 1`] = `
+exports[`WardenAirdrop gas updateRoot gas 10000 users 1`] = `
+Object {
+  "calldataByteLength": 36,
+  "gasUsed": 47141,
+}
+`;
+
+exports[`WardenAirdrop gas updateRoot gas 50000 users 1`] = `
 Object {
   "calldataByteLength": 36,
   "gasUsed": 47141,

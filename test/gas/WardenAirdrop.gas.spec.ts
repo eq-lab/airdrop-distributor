@@ -6,11 +6,62 @@ import { constructMerkleTree, generateRandomAirdropData } from '../shared/utils'
 import { parseUnits } from 'ethers/lib/utils';
 
 describe('WardenAirdrop gas', () => {
-  it('claim gas', async () => {
+  it('claim gas 100 eligible users', async () => {
     const { wardenAirdrop, owner } = await loadFixture(createAirdrop);
     const [_, user] = await ethers.getSigners();
 
     const airdropData = generateRandomAirdropData(99);
+    const userAmount = parseUnits('100', 18);
+    airdropData.push({ address: user.address, amount: userAmount });
+
+    const tree = constructMerkleTree(airdropData);
+    await wardenAirdrop.connect(owner).updateRoot(tree.getHexRoot());
+
+    const userProof = tree.getHexProof(
+      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
+    );
+    await snapshotGasCost(await wardenAirdrop.connect(user).claim(userAmount, userProof));
+  });
+
+  it('claim gas 1000 eligible users', async () => {
+    const { wardenAirdrop, owner } = await loadFixture(createAirdrop);
+    const [_, user] = await ethers.getSigners();
+
+    const airdropData = generateRandomAirdropData(999);
+    const userAmount = parseUnits('100', 18);
+    airdropData.push({ address: user.address, amount: userAmount });
+
+    const tree = constructMerkleTree(airdropData);
+    await wardenAirdrop.connect(owner).updateRoot(tree.getHexRoot());
+
+    const userProof = tree.getHexProof(
+      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
+    );
+    await snapshotGasCost(await wardenAirdrop.connect(user).claim(userAmount, userProof));
+  });
+
+  it('claim gas 10000 eligible users', async () => {
+    const { wardenAirdrop, owner } = await loadFixture(createAirdrop);
+    const [_, user] = await ethers.getSigners();
+
+    const airdropData = generateRandomAirdropData(9999);
+    const userAmount = parseUnits('100', 18);
+    airdropData.push({ address: user.address, amount: userAmount });
+
+    const tree = constructMerkleTree(airdropData);
+    await wardenAirdrop.connect(owner).updateRoot(tree.getHexRoot());
+
+    const userProof = tree.getHexProof(
+      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
+    );
+    await snapshotGasCost(await wardenAirdrop.connect(user).claim(userAmount, userProof));
+  });
+
+  it('claim gas 50000 eligible users', async () => {
+    const { wardenAirdrop, owner } = await loadFixture(createAirdrop);
+    const [_, user] = await ethers.getSigners();
+
+    const airdropData = generateRandomAirdropData(49999);
     const userAmount = parseUnits('100', 18);
     airdropData.push({ address: user.address, amount: userAmount });
 
@@ -43,6 +94,14 @@ describe('WardenAirdrop gas', () => {
     const { wardenAirdrop, owner } = await loadFixture(createAirdrop);
 
     const airdropData = generateRandomAirdropData(10000);
+    const tree = constructMerkleTree(airdropData);
+    await snapshotGasCost(await wardenAirdrop.connect(owner).updateRoot(tree.getHexRoot()));
+  });
+
+  it('updateRoot gas 50000 users', async () => {
+    const { wardenAirdrop, owner } = await loadFixture(createAirdrop);
+
+    const airdropData = generateRandomAirdropData(50000);
     const tree = constructMerkleTree(airdropData);
     await snapshotGasCost(await wardenAirdrop.connect(owner).updateRoot(tree.getHexRoot()));
   });
