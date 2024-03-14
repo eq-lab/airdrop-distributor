@@ -26,8 +26,8 @@ interface IWardenAirdrop {
   function updateRoot(bytes32 newMerkleRoot) external;
 
   /// @notice returns token address allocated for airdrop
-  function airdropToken() external view returns(address);
+  function airdropToken() external view returns (address);
 
   /// @notice returns current merkle root used for proofs verification
-  function merkleRoot() external view returns(bytes32);
+  function merkleRoot() external view returns (bytes32);
 }
