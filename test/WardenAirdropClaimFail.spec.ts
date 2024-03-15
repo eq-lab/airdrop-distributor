@@ -19,9 +19,29 @@ describe('WardenAirdropClaim fail', () => {
     const ineligibleUserProof = tree.getHexProof(
       ethers.utils.solidityKeccak256(['address', 'uint256'], [ineligibleUser.address, userAmount])
     );
+    expect(await wardenAirdrop.verifyClaim(ineligibleUser.address, userAmount, ineligibleUserProof)).to.be.false;
     await expect(wardenAirdrop.connect(ineligibleUser).claim(userAmount, ineligibleUserProof)).to.be.revertedWith(
       'Proof failed'
     );
+  });
+
+  it('claim ineligible user with other user proof fail', async () => {
+    const { wardenAirdrop, owner } = await loadFixture(createAirdrop);
+    const [_, ineligibleUser] = await ethers.getSigners();
+
+    const airdropData = generateRandomAirdropData(10);
+
+    const tree = constructMerkleTree(airdropData);
+    await wardenAirdrop.connect(owner).updateRoot(tree.getHexRoot());
+
+    const eligibleUser = airdropData[0];
+    const eligibleUserProof = tree.getHexProof(
+      ethers.utils.solidityKeccak256(['address', 'uint256'], [eligibleUser.address, eligibleUser.amount])
+    );
+    expect(await wardenAirdrop.verifyClaim(eligibleUser.address, eligibleUser.amount, eligibleUserProof)).to.be.true;
+    await expect(
+      wardenAirdrop.connect(ineligibleUser).claim(eligibleUser.amount, eligibleUserProof)
+    ).to.be.revertedWith('Proof failed');
   });
 
   it('claim wrong amount with correct proof', async () => {
@@ -39,6 +59,7 @@ describe('WardenAirdropClaim fail', () => {
     const userProof = tree.getHexProof(
       ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
     );
+    expect(await wardenAirdrop.verifyClaim(user.address, userAmount, userProof)).to.be.true;
     await expect(wardenAirdrop.connect(user).claim(wrongUserAmount, userProof)).to.be.revertedWith('Proof failed');
   });
 
@@ -57,6 +78,7 @@ describe('WardenAirdropClaim fail', () => {
     const userProof = tree.getHexProof(
       ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, wrongUserAmount])
     );
+    expect(await wardenAirdrop.verifyClaim(user.address, userAmount, userProof)).to.be.false;
     await expect(wardenAirdrop.connect(user).claim(userAmount, userProof)).to.be.revertedWith('Proof failed');
   });
 
@@ -75,6 +97,7 @@ describe('WardenAirdropClaim fail', () => {
     const userProof = tree.getHexProof(
       ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, wrongUserAmount])
     );
+    expect(await wardenAirdrop.verifyClaim(user.address, userAmount, userProof)).to.be.false;
     await expect(wardenAirdrop.connect(user).claim(wrongUserAmount, userProof)).to.be.revertedWith('Proof failed');
   });
 
@@ -94,6 +117,7 @@ describe('WardenAirdropClaim fail', () => {
     );
     await wardenAirdrop.connect(user).claim(userAmount, userProof);
 
+    expect(await wardenAirdrop.verifyClaim(user.address, userAmount, userProof)).to.be.true;
     await expect(wardenAirdrop.connect(user).claim(userAmount, userProof)).to.be.revertedWith('Already claimed');
   });
 });

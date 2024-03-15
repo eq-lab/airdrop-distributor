@@ -22,11 +22,11 @@ export function constructProof(tree: MerkleTree, userAirdropData: UserAirdropDat
 }
 
 export function generateRandomAirdropData(userNum: number): UserAirdropData[] {
-  const airdropData: UserAirdropData[] = new Array();
+  let airdropData: UserAirdropData[] = new Array(userNum);
   for (let i = 0; i < userNum; ++i) {
     const randomUser = ethers.Wallet.createRandom().address;
     const randomAmount = BigNumber.from(Math.ceil(Math.random() * 100_000)).mul(10n ** 15n);
-    airdropData.push({ address: randomUser, amount: randomAmount });
+    airdropData[i] = { address: randomUser, amount: randomAmount };
   }
 
   return airdropData;

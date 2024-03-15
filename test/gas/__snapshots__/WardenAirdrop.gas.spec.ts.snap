@@ -3,28 +3,28 @@
 exports[`WardenAirdrop gas claim gas 100 eligible users 1`] = `
 Object {
   "calldataByteLength": 324,
-  "gasUsed": 95690,
+  "gasUsed": 95480,
 }
 `;
 
 exports[`WardenAirdrop gas claim gas 1000 eligible users 1`] = `
 Object {
   "calldataByteLength": 420,
-  "gasUsed": 98247,
+  "gasUsed": 98445,
 }
 `;
 
 exports[`WardenAirdrop gas claim gas 10000 eligible users 1`] = `
 Object {
   "calldataByteLength": 548,
-  "gasUsed": 102137,
+  "gasUsed": 102207,
 }
 `;
 
 exports[`WardenAirdrop gas claim gas 50000 eligible users 1`] = `
 Object {
   "calldataByteLength": 612,
-  "gasUsed": 103919,
+  "gasUsed": 103697,
 }
 `;
 
