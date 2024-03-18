@@ -1,6 +1,5 @@
 import '@nomicfoundation/hardhat-toolbox';
 require('hardhat-contract-sizer');
-require('hardhat-dependency-compiler');
 
 const config = {
   solidity: {
