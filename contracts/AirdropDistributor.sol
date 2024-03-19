@@ -23,6 +23,8 @@ contract AirdropDistributor is IAirdropDistributor, Ownable2Step {
   mapping(address => uint256) public claimed;
 
   constructor(address _airdropToken, address _airdropTokenStorage) Ownable2Step() {
+    require(_airdropToken != address(0), 'airdropToken address is zero');
+    require(_airdropTokenStorage != address(0), 'airdropToken storage address is zero');
     airdropToken = _airdropToken;
     airdropTokenStorage = _airdropTokenStorage;
   }
