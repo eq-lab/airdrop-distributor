@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { handle } from '@oclif/errors';
 import { Command, flags } from '@oclif/command';
-import { WardenAirdrop__factory } from '../typechain-types';
+import { AirdropDistributor__factory } from '../typechain-types';
 import { formatUnits } from 'ethers/lib/utils';
 import ganache from 'ganache';
 import fs from 'fs';
@@ -48,7 +48,7 @@ class AirdropDeployment extends Command {
     const initialBalance = await deployer.getBalance();
     console.log(`Deployer initial balance: ${formatUnits(initialBalance, 18)} ETH`);
 
-    const airdropContractFactory = new WardenAirdrop__factory();
+    const airdropContractFactory = new AirdropDistributor__factory();
     const airdropContract = await airdropContractFactory
       .connect(deployer)
       .deploy(configData.airdropTokenAddress, configData.airdropTokenStorageAddress);

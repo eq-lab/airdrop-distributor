@@ -1,6 +1,6 @@
 import { MerkleTree } from '@thirdweb-dev/merkletree';
 import { BigNumber, BigNumberish } from 'ethers';
-import { keccak256, parseUnits, solidityKeccak256 } from 'ethers/lib/utils';
+import { keccak256, solidityKeccak256 } from 'ethers/lib/utils';
 import { ethers } from 'hardhat';
 
 export type UserAirdropData = { address: string; amount: BigNumberish };

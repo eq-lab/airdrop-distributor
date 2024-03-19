@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity 0.8.19;
 
-interface IWardenAirdrop {
+interface IAirdropDistributor {
   /// @notice emitted when contract owner updates merkle root used in proofs verification
   event NewMerkleRoot(bytes32 newMerkleRoot);
   /// @notice emitted when user claimed allocated tokens

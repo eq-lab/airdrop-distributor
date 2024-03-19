@@ -8,9 +8,9 @@ import '@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol';
 
 import '@thirdweb-dev/contracts/lib/MerkleProof.sol';
 
-import './interfaces/IWardenAirdrop.sol';
+import './interfaces/IAirdropDistributor.sol';
 
-contract WardenAirdrop is IWardenAirdrop, Ownable2Step {
+contract AirdropDistributor is IAirdropDistributor, Ownable2Step {
   using LowGasSafeMath for uint256;
 
   /// @notice token address allocated for airdrop
@@ -27,7 +27,7 @@ contract WardenAirdrop is IWardenAirdrop, Ownable2Step {
     airdropTokenStorage = _airdropTokenStorage;
   }
 
-  /// @inheritdoc IWardenAirdrop
+  /// @inheritdoc IAirdropDistributor
   function verifyClaim(
     address claimer,
     uint256 amount,
@@ -36,7 +36,7 @@ contract WardenAirdrop is IWardenAirdrop, Ownable2Step {
     (success, ) = MerkleProof.verify(proofs, merkleRoot, keccak256(abi.encodePacked(claimer, amount)));
   }
 
-  /// @inheritdoc IWardenAirdrop
+  /// @inheritdoc IAirdropDistributor
   function claim(uint256 amount, bytes32[] calldata proofs) external {
     uint256 alreadyClaimed = claimed[msg.sender];
     require(alreadyClaimed < amount, 'Already claimed');
@@ -50,7 +50,7 @@ contract WardenAirdrop is IWardenAirdrop, Ownable2Step {
     emit Claim(msg.sender, claimedAmount);
   }
 
-  /// @inheritdoc IWardenAirdrop
+  /// @inheritdoc IAirdropDistributor
   function updateRoot(bytes32 newMerkleRoot) external onlyOwner {
     merkleRoot = newMerkleRoot;
     emit NewMerkleRoot(newMerkleRoot);
