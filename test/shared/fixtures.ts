@@ -2,7 +2,12 @@ import { expect } from 'chai';
 import { Signer } from 'ethers';
 import { parseUnits } from 'ethers/lib/utils';
 import { ethers } from 'hardhat';
-import { AirdropDistributor, MintableERC20, AirdropDistributor__factory, MintableERC20__factory } from '../../typechain-types';
+import {
+  AirdropDistributor,
+  MintableERC20,
+  AirdropDistributor__factory,
+  MintableERC20__factory,
+} from '../../typechain-types';
 
 export async function createAirdrop(): Promise<{
   airdropDistributor: AirdropDistributor;
@@ -14,7 +19,9 @@ export async function createAirdrop(): Promise<{
   const airdropStorage = signers.at(-1)!;
 
   const token = await new MintableERC20__factory().connect(owner).deploy('proof test token', 'PTT');
-  const airdropDistributor = await new AirdropDistributor__factory().connect(owner).deploy(token.address, airdropStorage.address);
+  const airdropDistributor = await new AirdropDistributor__factory()
+    .connect(owner)
+    .deploy(token.address, airdropStorage.address);
 
   const totalAirdropAmount = parseUnits('1000000', 18); // 1_000_000 * 10^18
   await token.connect(owner).mint(airdropStorage.address, totalAirdropAmount);

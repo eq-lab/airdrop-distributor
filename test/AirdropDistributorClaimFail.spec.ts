@@ -38,7 +38,8 @@ describe('AirdropDistributorClaim fail', () => {
     const eligibleUserProof = tree.getHexProof(
       ethers.utils.solidityKeccak256(['address', 'uint256'], [eligibleUser.address, eligibleUser.amount])
     );
-    expect(await airdropDistributor.verifyClaim(eligibleUser.address, eligibleUser.amount, eligibleUserProof)).to.be.true;
+    expect(await airdropDistributor.verifyClaim(eligibleUser.address, eligibleUser.amount, eligibleUserProof)).to.be
+      .true;
     await expect(
       airdropDistributor.connect(ineligibleUser).claim(eligibleUser.amount, eligibleUserProof)
     ).to.be.revertedWith('Proof failed');
