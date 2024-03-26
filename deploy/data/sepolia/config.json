@@ -1,0 +1,8 @@
+{
+  "nodeUri": "https://ethereum-sepolia-rpc.publicnode.com",
+  "airdropTokenStorageAddress": "0xd8e671D276E0B6828B88F29Aaee840b03E452fdA",
+  "testToken": {
+    "name": "warp test token",
+    "symbol": "WTT"
+  }
+}
