@@ -2,6 +2,8 @@
 pragma solidity 0.8.19;
 
 interface IAirdropDistributor {
+  /// @notice emitted when new merkleRootManager is set
+  event NewMerkleRootManager(address indexed newMerkleRootManager);
   /// @notice emitted when contract owner updates merkle root used in proofs verification
   event NewMerkleRoot(bytes32 newMerkleRoot);
   /// @notice emitted when user claimed allocated tokens
