@@ -3,55 +3,55 @@
 exports[`AirdropDistributor gas claim gas 100 eligible users 1`] = `
 Object {
   "calldataByteLength": 324,
-  "gasUsed": 95574,
+  "gasUsed": 95208,
 }
 `;
 
 exports[`AirdropDistributor gas claim gas 1000 eligible users 1`] = `
 Object {
   "calldataByteLength": 420,
-  "gasUsed": 98445,
+  "gasUsed": 97665,
 }
 `;
 
 exports[`AirdropDistributor gas claim gas 10000 eligible users 1`] = `
 Object {
   "calldataByteLength": 548,
-  "gasUsed": 102079,
+  "gasUsed": 101027,
 }
 `;
 
 exports[`AirdropDistributor gas claim gas 50000 eligible users 1`] = `
 Object {
   "calldataByteLength": 612,
-  "gasUsed": 103953,
+  "gasUsed": 102919,
 }
 `;
 
 exports[`AirdropDistributor gas updateRoot gas 100 users 1`] = `
 Object {
   "calldataByteLength": 36,
-  "gasUsed": 47129,
+  "gasUsed": 47365,
 }
 `;
 
 exports[`AirdropDistributor gas updateRoot gas 1000 users 1`] = `
 Object {
   "calldataByteLength": 36,
-  "gasUsed": 47141,
+  "gasUsed": 47365,
 }
 `;
 
 exports[`AirdropDistributor gas updateRoot gas 10000 users 1`] = `
 Object {
   "calldataByteLength": 36,
-  "gasUsed": 47141,
+  "gasUsed": 47365,
 }
 `;
 
 exports[`AirdropDistributor gas updateRoot gas 50000 users 1`] = `
 Object {
   "calldataByteLength": 36,
-  "gasUsed": 47141,
+  "gasUsed": 47353,
 }
 `;
