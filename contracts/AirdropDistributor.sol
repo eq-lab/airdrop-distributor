@@ -15,8 +15,6 @@ contract AirdropDistributor is IAirdropDistributor, AccessControl, Ownable2Step 
   address public immutable airdropToken;
   /// @notice address which allocated tokens are transferred from during claim
   address public immutable airdropTokenStorage;
-  /// @notice manager address which has rights to update merkle root
-  address public merkleRootManager;
   /// @notice current merkle root used for proofs verification
   bytes32 public merkleRoot;
   /// @notice stores total amounts each user has already claimed
