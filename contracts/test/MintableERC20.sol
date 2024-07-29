@@ -6,7 +6,7 @@ import '@openzeppelin/contracts/access/Ownable2Step.sol';
 
 /// @dev Mintable ERC20 token.
 contract MintableERC20 is ERC20, Ownable2Step {
-  constructor(string memory name, string memory symbol) ERC20(name, symbol) {}
+  constructor(string memory name, string memory symbol) ERC20(name, symbol) Ownable(msg.sender) {}
 
   function mint(address account, uint256 amount) external {
     _mint(account, amount);
