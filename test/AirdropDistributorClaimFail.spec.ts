@@ -3,7 +3,7 @@ import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { ethers } from 'hardhat';
 import { createAirdrop } from './shared/fixtures';
 import { constructMerkleTree, generateRandomAirdropData } from './shared/utils';
-import { parseUnits } from 'ethers/lib/utils';
+import { parseUnits } from 'ethers';
 
 describe('AirdropDistributorClaim fail', () => {
   it('claim ineligible user with other user proof fail', async () => {
@@ -30,7 +30,7 @@ describe('AirdropDistributorClaim fail', () => {
 
     const airdropData = generateRandomAirdropData(9);
     const userAmount = parseUnits('100', 18);
-    const wrongUserAmount = userAmount.add(1);
+    const wrongUserAmount = userAmount + 1n;
     airdropData.push({ address: user.address, amount: userAmount });
 
     const tree = constructMerkleTree(airdropData);

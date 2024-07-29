@@ -3,7 +3,7 @@ import snapshotGasCost from '@uniswap/snapshot-gas-cost';
 import { ethers } from 'hardhat';
 import { createAirdrop } from '../shared/fixtures';
 import { constructMerkleTree, generateRandomAirdropData } from '../shared/utils';
-import { parseUnits } from 'ethers/lib/utils';
+import { parseUnits } from 'ethers';
 
 describe('AirdropDistributor gas', () => {
   it('claim gas 100 eligible users', async () => {
@@ -17,10 +17,9 @@ describe('AirdropDistributor gas', () => {
     const tree = constructMerkleTree(airdropData);
     await airdropDistributor.connect(owner).updateRoot(tree.root);
 
-    const userProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
-    );
-    await snapshotGasCost(await airdropDistributor.connect(user).claim(userAmount, userProof));
+    const userProof = tree.getProof([user.address, userAmount]);
+    const txReceipt = await (await airdropDistributor.connect(user).claim(userAmount, userProof)).wait();
+    await snapshotGasCost(Number(txReceipt?.gasUsed));
   });
 
   it('claim gas 1000 eligible users', async () => {
@@ -34,10 +33,9 @@ describe('AirdropDistributor gas', () => {
     const tree = constructMerkleTree(airdropData);
     await airdropDistributor.connect(owner).updateRoot(tree.root);
 
-    const userProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
-    );
-    await snapshotGasCost(await airdropDistributor.connect(user).claim(userAmount, userProof));
+    const userProof = tree.getProof([user.address, userAmount]);
+    const txReceipt = await (await airdropDistributor.connect(user).claim(userAmount, userProof)).wait();
+    await snapshotGasCost(Number(txReceipt?.gasUsed));
   });
 
   it('claim gas 10000 eligible users', async () => {
@@ -51,10 +49,9 @@ describe('AirdropDistributor gas', () => {
     const tree = constructMerkleTree(airdropData);
     await airdropDistributor.connect(owner).updateRoot(tree.root);
 
-    const userProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
-    );
-    await snapshotGasCost(await airdropDistributor.connect(user).claim(userAmount, userProof));
+    const userProof = tree.getProof([user.address, userAmount]);
+    const txReceipt = await (await airdropDistributor.connect(user).claim(userAmount, userProof)).wait();
+    await snapshotGasCost(Number(txReceipt?.gasUsed));
   });
 
   it('claim gas 50000 eligible users', async () => {
@@ -68,10 +65,9 @@ describe('AirdropDistributor gas', () => {
     const tree = constructMerkleTree(airdropData);
     await airdropDistributor.connect(owner).updateRoot(tree.root);
 
-    const userProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
-    );
-    await snapshotGasCost(await airdropDistributor.connect(user).claim(userAmount, userProof));
+    const userProof = tree.getProof([user.address, userAmount]);
+    const txReceipt = await (await airdropDistributor.connect(user).claim(userAmount, userProof)).wait();
+    await snapshotGasCost(Number(txReceipt?.gasUsed));
   });
 
   it('updateRoot gas 100 users', async () => {
@@ -79,7 +75,8 @@ describe('AirdropDistributor gas', () => {
 
     const airdropData = generateRandomAirdropData(100);
     const tree = constructMerkleTree(airdropData);
-    await snapshotGasCost(await airdropDistributor.connect(owner).updateRoot(tree.root));
+    const txReceipt = await (await airdropDistributor.connect(owner).updateRoot(tree.root)).wait();
+    await snapshotGasCost(Number(txReceipt?.gasUsed));
   });
 
   it('updateRoot gas 1000 users', async () => {
@@ -87,7 +84,8 @@ describe('AirdropDistributor gas', () => {
 
     const airdropData = generateRandomAirdropData(1000);
     const tree = constructMerkleTree(airdropData);
-    await snapshotGasCost(await airdropDistributor.connect(owner).updateRoot(tree.root));
+    const txReceipt = await (await airdropDistributor.connect(owner).updateRoot(tree.root)).wait();
+    await snapshotGasCost(Number(txReceipt?.gasUsed));
   });
 
   it('updateRoot gas 10000 users', async () => {
@@ -95,7 +93,8 @@ describe('AirdropDistributor gas', () => {
 
     const airdropData = generateRandomAirdropData(10000);
     const tree = constructMerkleTree(airdropData);
-    await snapshotGasCost(await airdropDistributor.connect(owner).updateRoot(tree.root));
+    const txReceipt = await (await airdropDistributor.connect(owner).updateRoot(tree.root)).wait();
+    await snapshotGasCost(Number(txReceipt?.gasUsed));
   });
 
   it('updateRoot gas 50000 users', async () => {
@@ -103,6 +102,7 @@ describe('AirdropDistributor gas', () => {
 
     const airdropData = generateRandomAirdropData(50000);
     const tree = constructMerkleTree(airdropData);
-    await snapshotGasCost(await airdropDistributor.connect(owner).updateRoot(tree.root));
+    const txReceipt = await (await airdropDistributor.connect(owner).updateRoot(tree.root)).wait();
+    await snapshotGasCost(Number(txReceipt?.gasUsed));
   });
 });

@@ -3,7 +3,7 @@ import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { ethers } from 'hardhat';
 import { createAirdrop } from './shared/fixtures';
 import { constructMerkleTree, generateRandomAirdropData } from './shared/utils';
-import { parseUnits } from 'ethers/lib/utils';
+import { parseUnits } from 'ethers';
 
 describe('AirdropDistributorClaim success', () => {
   it('claim base', async () => {
@@ -26,7 +26,7 @@ describe('AirdropDistributorClaim success', () => {
     expect(await token.balanceOf(user.address)).to.be.eq(userAmount);
 
     const storageBalanceCurrent = await token.balanceOf(tokenStorage);
-    expect(storageBalanceBefore.sub(storageBalanceCurrent)).to.be.eq(userAmount);
+    expect(storageBalanceBefore - storageBalanceCurrent).to.be.eq(userAmount);
 
     expect(await airdropDistributor.claimed(user.address)).to.be.eq(userAmount);
   });
@@ -48,7 +48,7 @@ describe('AirdropDistributorClaim success', () => {
     const userProof = tree.getProof([user.address, userAmount]);
     await airdropDistributor.connect(user).claim(userAmount, userProof);
 
-    const newUserAmount = userAmount.mul(3);
+    const newUserAmount = userAmount * 3n;
     airdropData.pop();
     airdropData.push({ address: user.address, amount: newUserAmount });
 
@@ -61,7 +61,7 @@ describe('AirdropDistributorClaim success', () => {
     expect(await token.balanceOf(user.address)).to.be.eq(newUserAmount);
 
     const storageBalanceCurrent = await token.balanceOf(tokenStorage);
-    expect(storageBalanceBefore.sub(storageBalanceCurrent)).to.be.eq(newUserAmount);
+    expect(storageBalanceBefore - storageBalanceCurrent).to.be.eq(newUserAmount);
 
     expect(await airdropDistributor.claimed(user.address)).to.be.eq(newUserAmount);
   });

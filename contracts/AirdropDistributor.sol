@@ -20,14 +20,14 @@ contract AirdropDistributor is IAirdropDistributor, AccessControl, Ownable2Step 
   /// @notice stores total amounts each user has already claimed
   mapping(address => uint256) public claimed;
 
-  constructor(address _airdropToken, address _airdropTokenStorage) {
+  constructor(address _airdropToken, address _airdropTokenStorage) Ownable(msg.sender) {
     require(_airdropToken != address(0), 'airdropToken address is zero');
     require(_airdropTokenStorage != address(0), 'airdropToken storage address is zero');
     airdropToken = _airdropToken;
     airdropTokenStorage = _airdropTokenStorage;
 
-    _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-    _setupRole(MANAGER_ROLE, msg.sender);
+    _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+    _grantRole(MANAGER_ROLE, msg.sender);
   }
 
   /// @inheritdoc IAirdropDistributor

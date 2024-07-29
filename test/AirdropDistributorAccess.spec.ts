@@ -45,10 +45,10 @@ describe('AirdropDistributor access', () => {
 
     const tree = constructMerkleTree(airdropData);
     const treeHexRoot = tree.root;
-    const outsiderAddress = outsider.address.toLowerCase();
 
-    await expect(airdropDistributor.connect(outsider).updateRoot(treeHexRoot)).to.be.revertedWith(
-      `AccessControl: account ${outsiderAddress} is missing role ${await airdropDistributor.MANAGER_ROLE()}`
+    await expect(airdropDistributor.connect(outsider).updateRoot(treeHexRoot)).to.be.revertedWithCustomError(
+      airdropDistributor,
+      'AccessControlUnauthorizedAccount'
     );
   });
 
@@ -56,7 +56,7 @@ describe('AirdropDistributor access', () => {
     const signer = (await ethers.getSigners()).at(0)!;
     const factory = new AirdropDistributor__factory();
     await expect(
-      factory.connect(signer).deploy(ethers.constants.AddressZero, ethers.Wallet.createRandom().address)
+      factory.connect(signer).deploy(ethers.ZeroAddress, ethers.Wallet.createRandom().address)
     ).to.be.revertedWith('airdropToken address is zero');
   });
 
@@ -64,7 +64,7 @@ describe('AirdropDistributor access', () => {
     const signer = (await ethers.getSigners()).at(0)!;
     const factory = new AirdropDistributor__factory();
     await expect(
-      factory.connect(signer).deploy(ethers.Wallet.createRandom().address, ethers.constants.AddressZero)
+      factory.connect(signer).deploy(ethers.Wallet.createRandom().address, ethers.ZeroAddress)
     ).to.be.revertedWith('airdropToken storage address is zero');
   });
 
@@ -85,10 +85,9 @@ describe('AirdropDistributor access', () => {
     expect(await owner.getAddress()).to.be.not.eq(notOwner.address);
 
     const managerRole = await airdropDistributor.MANAGER_ROLE();
-    const notOwnerAddress = notOwner.address.toLowerCase();
 
-    await expect(airdropDistributor.connect(notOwner).grantRole(managerRole, manager.address)).to.be.revertedWith(
-      `AccessControl: account ${notOwnerAddress} is missing role ${await airdropDistributor.DEFAULT_ADMIN_ROLE()}`
-    );
+    await expect(
+      airdropDistributor.connect(notOwner).grantRole(managerRole, manager.address)
+    ).to.be.revertedWithCustomError(airdropDistributor, 'AccessControlUnauthorizedAccount');
   });
 });
