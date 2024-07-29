@@ -36,7 +36,7 @@ contract AirdropDistributor is IAirdropDistributor, AccessControl, Ownable2Step 
     uint256 amount,
     bytes32[] calldata proofs
   ) public view override returns (bool success) {
-    success = MerkleProof.verify(proofs, merkleRoot,  keccak256(bytes.concat(keccak256(abi.encode(claimer, amount)))));
+    success = MerkleProof.verify(proofs, merkleRoot, keccak256(bytes.concat(keccak256(abi.encode(claimer, amount)))));
   }
 
   /// @inheritdoc IAirdropDistributor
