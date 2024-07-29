@@ -12,7 +12,7 @@ describe('AirdropDistributor access', () => {
     const airdropData = generateRandomAirdropData(10);
 
     const tree = constructMerkleTree(airdropData);
-    const treeHexRoot = tree.getHexRoot();
+    const treeHexRoot = tree.root;
 
     expect(await airdropDistributor.merkleRoot()).to.be.not.eq(treeHexRoot);
     await airdropDistributor.connect(owner).updateRoot(treeHexRoot);
@@ -29,7 +29,7 @@ describe('AirdropDistributor access', () => {
     const airdropData = generateRandomAirdropData(10);
 
     const tree = constructMerkleTree(airdropData);
-    const treeHexRoot = tree.getHexRoot();
+    const treeHexRoot = tree.root;
 
     expect(await airdropDistributor.merkleRoot()).to.be.not.eq(treeHexRoot);
     await airdropDistributor.connect(manager).updateRoot(treeHexRoot);
@@ -44,7 +44,7 @@ describe('AirdropDistributor access', () => {
     const airdropData = generateRandomAirdropData(10);
 
     const tree = constructMerkleTree(airdropData);
-    const treeHexRoot = tree.getHexRoot();
+    const treeHexRoot = tree.root;
     const outsiderAddress = outsider.address.toLowerCase();
 
     await expect(airdropDistributor.connect(outsider).updateRoot(treeHexRoot)).to.be.revertedWith(
