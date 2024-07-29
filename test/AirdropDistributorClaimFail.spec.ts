@@ -14,11 +14,9 @@ describe('AirdropDistributorClaim fail', () => {
     const userAmount = parseUnits('100', 18);
 
     const tree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(tree.getHexRoot());
+    await airdropDistributor.connect(owner).updateRoot(tree.root);
 
-    const ineligibleUserProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [ineligibleUser.address, userAmount])
-    );
+    const ineligibleUserProof = tree.getProof([ineligibleUser.address, userAmount]);
     expect(await airdropDistributor.verifyClaim(ineligibleUser.address, userAmount, ineligibleUserProof)).to.be.false;
     await expect(airdropDistributor.connect(ineligibleUser).claim(userAmount, ineligibleUserProof)).to.be.revertedWith(
       'Proof failed'
@@ -32,12 +30,10 @@ describe('AirdropDistributorClaim fail', () => {
     const airdropData = generateRandomAirdropData(10);
 
     const tree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(tree.getHexRoot());
+    await airdropDistributor.connect(owner).updateRoot(tree.root);
 
     const eligibleUser = airdropData[0];
-    const eligibleUserProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [eligibleUser.address, eligibleUser.amount])
-    );
+    const eligibleUserProof = tree.getProof([eligibleUser.address, eligibleUser.amount]);
     expect(await airdropDistributor.verifyClaim(eligibleUser.address, eligibleUser.amount, eligibleUserProof)).to.be
       .true;
     await expect(
@@ -55,11 +51,9 @@ describe('AirdropDistributorClaim fail', () => {
     airdropData.push({ address: user.address, amount: userAmount });
 
     const tree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(tree.getHexRoot());
+    await airdropDistributor.connect(owner).updateRoot(tree.root);
 
-    const userProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
-    );
+    const userProof = tree.getProof([user.address, userAmount]);
     expect(await airdropDistributor.verifyClaim(user.address, userAmount, userProof)).to.be.true;
     await expect(airdropDistributor.connect(user).claim(wrongUserAmount, userProof)).to.be.revertedWith('Proof failed');
   });
@@ -74,11 +68,9 @@ describe('AirdropDistributorClaim fail', () => {
     airdropData.push({ address: user.address, amount: userAmount });
 
     const tree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(tree.getHexRoot());
+    await airdropDistributor.connect(owner).updateRoot(tree.root);
 
-    const userProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, wrongUserAmount])
-    );
+    const userProof = tree.getProof([user.address, wrongUserAmount]);
     expect(await airdropDistributor.verifyClaim(user.address, userAmount, userProof)).to.be.false;
     await expect(airdropDistributor.connect(user).claim(userAmount, userProof)).to.be.revertedWith('Proof failed');
   });
@@ -93,11 +85,9 @@ describe('AirdropDistributorClaim fail', () => {
     airdropData.push({ address: user.address, amount: userAmount });
 
     const tree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(tree.getHexRoot());
+    await airdropDistributor.connect(owner).updateRoot(tree.root);
 
-    const userProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, wrongUserAmount])
-    );
+    const userProof = tree.getProof([user.address, wrongUserAmount]);
     expect(await airdropDistributor.verifyClaim(user.address, userAmount, userProof)).to.be.false;
     await expect(airdropDistributor.connect(user).claim(wrongUserAmount, userProof)).to.be.revertedWith('Proof failed');
   });
@@ -111,11 +101,9 @@ describe('AirdropDistributorClaim fail', () => {
     airdropData.push({ address: user.address, amount: userAmount });
 
     const tree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(tree.getHexRoot());
+    await airdropDistributor.connect(owner).updateRoot(tree.root);
 
-    const userProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
-    );
+    const userProof = tree.getProof([user.address, userAmount]);
     await airdropDistributor.connect(user).claim(userAmount, userProof);
 
     expect(await airdropDistributor.verifyClaim(user.address, userAmount, userProof)).to.be.true;

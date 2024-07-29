@@ -3,8 +3,8 @@ pragma solidity 0.8.24;
 
 import '@openzeppelin/contracts/access/AccessControl.sol';
 import '@openzeppelin/contracts/access/Ownable2Step.sol';
+import '@openzeppelin/contracts/utils/cryptography/MerkleProof.sol';
 import '@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol';
-import '@thirdweb-dev/contracts/lib/MerkleProof.sol';
 
 import './interfaces/IAirdropDistributor.sol';
 
@@ -36,7 +36,7 @@ contract AirdropDistributor is IAirdropDistributor, AccessControl, Ownable2Step 
     uint256 amount,
     bytes32[] calldata proofs
   ) public view override returns (bool success) {
-    (success, ) = MerkleProof.verify(proofs, merkleRoot, keccak256(abi.encodePacked(claimer, amount)));
+    success = MerkleProof.verify(proofs, merkleRoot,  keccak256(bytes.concat(keccak256(abi.encode(claimer, amount)))));
   }
 
   /// @inheritdoc IAirdropDistributor

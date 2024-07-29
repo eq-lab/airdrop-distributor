@@ -1,24 +1,17 @@
-import { MerkleTree } from '@thirdweb-dev/merkletree';
+import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { BigNumber, BigNumberish } from 'ethers';
-import { keccak256, solidityKeccak256 } from 'ethers/lib/utils';
 import { ethers } from 'hardhat';
 
 export type UserAirdropData = { address: string; amount: BigNumberish };
 
-export function constructMerkleTree(airdropData: UserAirdropData[]): MerkleTree {
-  const hashedLeafs = airdropData.map((userData) =>
-    solidityKeccak256(['address', 'uint256'], [userData.address, userData.amount])
-  );
+export function constructMerkleTree(airdropData: UserAirdropData[]): StandardMerkleTree<BigNumberish[]> {
+  const leafs = airdropData.map((userData) => [userData.address, userData.amount]);
 
-  return new MerkleTree(hashedLeafs, keccak256, {
-    sort: true,
-    sortLeaves: true,
-    sortPairs: true,
-  });
+  return StandardMerkleTree.of(leafs, ['address', 'uint256']);
 }
 
-export function constructProof(tree: MerkleTree, userAirdropData: UserAirdropData): string[] {
-  return tree.getHexProof(solidityKeccak256(['address', 'uint256'], [userAirdropData.address, userAirdropData.amount]));
+export function constructProof(tree: StandardMerkleTree<BigNumberish[]>, userAirdropData: UserAirdropData): string[] {
+  return tree.getProof([userAirdropData.address, userAirdropData.amount]);
 }
 
 export function generateRandomAirdropData(userNum: number): UserAirdropData[] {

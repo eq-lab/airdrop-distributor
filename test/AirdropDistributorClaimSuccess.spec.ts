@@ -18,11 +18,9 @@ describe('AirdropDistributorClaim success', () => {
     airdropData.push({ address: user.address, amount: userAmount });
 
     const tree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(tree.getHexRoot());
+    await airdropDistributor.connect(owner).updateRoot(tree.root);
 
-    const userProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
-    );
+    const userProof = tree.getProof([user.address, userAmount]);
     await airdropDistributor.connect(user).claim(userAmount, userProof);
 
     expect(await token.balanceOf(user.address)).to.be.eq(userAmount);
@@ -45,11 +43,9 @@ describe('AirdropDistributorClaim success', () => {
     airdropData.push({ address: user.address, amount: userAmount });
 
     const tree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(tree.getHexRoot());
+    await airdropDistributor.connect(owner).updateRoot(tree.root);
 
-    const userProof = tree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, userAmount])
-    );
+    const userProof = tree.getProof([user.address, userAmount]);
     await airdropDistributor.connect(user).claim(userAmount, userProof);
 
     const newUserAmount = userAmount.mul(3);
@@ -57,11 +53,9 @@ describe('AirdropDistributorClaim success', () => {
     airdropData.push({ address: user.address, amount: newUserAmount });
 
     const newTree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(newTree.getHexRoot());
+    await airdropDistributor.connect(owner).updateRoot(newTree.root);
 
-    const newUserProof = newTree.getHexProof(
-      ethers.utils.solidityKeccak256(['address', 'uint256'], [user.address, newUserAmount])
-    );
+    const newUserProof = newTree.getProof([user.address, newUserAmount]);
     await airdropDistributor.connect(user).claim(newUserAmount, newUserProof);
 
     expect(await token.balanceOf(user.address)).to.be.eq(newUserAmount);
