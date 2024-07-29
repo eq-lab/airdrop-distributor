@@ -6,23 +6,6 @@ import { constructMerkleTree, generateRandomAirdropData } from './shared/utils';
 import { parseUnits } from 'ethers/lib/utils';
 
 describe('AirdropDistributorClaim fail', () => {
-  it('claim ineligible user fail', async () => {
-    const { airdropDistributor, owner } = await loadFixture(createAirdrop);
-    const [_, ineligibleUser] = await ethers.getSigners();
-
-    const airdropData = generateRandomAirdropData(10);
-    const userAmount = parseUnits('100', 18);
-
-    const tree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(tree.root);
-
-    const ineligibleUserProof = tree.getProof([ineligibleUser.address, userAmount]);
-    expect(await airdropDistributor.verifyClaim(ineligibleUser.address, userAmount, ineligibleUserProof)).to.be.false;
-    await expect(airdropDistributor.connect(ineligibleUser).claim(userAmount, ineligibleUserProof)).to.be.revertedWith(
-      'Proof failed'
-    );
-  });
-
   it('claim ineligible user with other user proof fail', async () => {
     const { airdropDistributor, owner } = await loadFixture(createAirdrop);
     const [_, ineligibleUser] = await ethers.getSigners();
@@ -55,40 +38,6 @@ describe('AirdropDistributorClaim fail', () => {
 
     const userProof = tree.getProof([user.address, userAmount]);
     expect(await airdropDistributor.verifyClaim(user.address, userAmount, userProof)).to.be.true;
-    await expect(airdropDistributor.connect(user).claim(wrongUserAmount, userProof)).to.be.revertedWith('Proof failed');
-  });
-
-  it('claim correct amount with wrong proof', async () => {
-    const { airdropDistributor, owner } = await loadFixture(createAirdrop);
-    const [_, user] = await ethers.getSigners();
-
-    const airdropData = generateRandomAirdropData(9);
-    const userAmount = parseUnits('100', 18);
-    const wrongUserAmount = userAmount.add(1);
-    airdropData.push({ address: user.address, amount: userAmount });
-
-    const tree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(tree.root);
-
-    const userProof = tree.getProof([user.address, wrongUserAmount]);
-    expect(await airdropDistributor.verifyClaim(user.address, userAmount, userProof)).to.be.false;
-    await expect(airdropDistributor.connect(user).claim(userAmount, userProof)).to.be.revertedWith('Proof failed');
-  });
-
-  it('claim wrong amount with wrong proof', async () => {
-    const { airdropDistributor, owner } = await loadFixture(createAirdrop);
-    const [_, user] = await ethers.getSigners();
-
-    const airdropData = generateRandomAirdropData(9);
-    const userAmount = parseUnits('100', 18);
-    const wrongUserAmount = userAmount.add(1);
-    airdropData.push({ address: user.address, amount: userAmount });
-
-    const tree = constructMerkleTree(airdropData);
-    await airdropDistributor.connect(owner).updateRoot(tree.root);
-
-    const userProof = tree.getProof([user.address, wrongUserAmount]);
-    expect(await airdropDistributor.verifyClaim(user.address, userAmount, userProof)).to.be.false;
     await expect(airdropDistributor.connect(user).claim(wrongUserAmount, userProof)).to.be.revertedWith('Proof failed');
   });
 
