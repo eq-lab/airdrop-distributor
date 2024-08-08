@@ -21,7 +21,17 @@ const config = {
     strict: false,
     only: ['Airdrop'],
     except: ['Mock', 'Test'],
-  }
+  },
+  networks: {
+    base: { 
+      url: "https://base-rpc.publicnode.com",
+    }
+  },
+  etherscan: {
+    apiKey: {
+      base: "",
+    }
+  },
 };
 
 export default config;
