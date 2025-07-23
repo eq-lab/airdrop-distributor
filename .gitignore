@@ -7,3 +7,8 @@ cache
 artifacts
 cache-zk
 artifacts-zk
+
+# Environment variables
+.env
+.env.local
+.env.production

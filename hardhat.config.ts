@@ -1,5 +1,9 @@
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
+
 import '@nomicfoundation/hardhat-toolbox';
 import 'hardhat-contract-sizer';
+import './tasks/deploy';
 
 const config = {
   solidity: {
@@ -23,14 +27,39 @@ const config = {
     except: ['Mock', 'Test'],
   },
   networks: {
-    base: { 
+    ethereum: {
+      url: "https://rpc.ankr.com/eth"
+    },
+    base: {
       url: "https://base-rpc.publicnode.com",
+    },
+    sepolia: {
+      url: process.env.SEPOLIA_RPC_URL || "https://ethereum-sepolia-rpc.publicnode.com",
+      chainId: 11155111,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    },
+    holesky: {
+      url: "https://ethereum-holesky-rpc.publicnode.com",
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     }
   },
   etherscan: {
     apiKey: {
-      base: "",
-    }
+      base: process.env.BASESCAN_API_KEY || "",
+      sepolia: process.env.ETHERSCAN_API_KEY || "",
+      holesky: process.env.ETHERSCAN_API_KEY || "",
+      mainnet: process.env.ETHERSCAN_API_KEY || ""
+    },
+    customChains: [
+      {
+        network: "sepolia",
+        chainId: 11155111,
+        urls: {
+          apiURL: "https://api-sepolia.etherscan.io/api",
+          browserURL: "https://sepolia.etherscan.io"
+        }
+      }
+    ]
   },
 };
 

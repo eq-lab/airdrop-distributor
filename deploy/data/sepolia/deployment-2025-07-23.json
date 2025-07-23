@@ -1,0 +1,10 @@
+{
+  "airdropContract": {
+    "address": "0xb251F34cd87b2D1DB444acF17efAeDff40e670a7",
+    "txHash": "0xef8308f1d1b80b503b9adfe1cf2528987a211729353ab7c75fec7e916bdf80c9"
+  },
+  "token": {
+    "address": "0x636148a5C9B3043a2d18bc3019f1d163df51c5f2",
+    "txHash": "0xb5627891b9d0198c036230ba4c10508c12fbceb68377343b826648216b561f77"
+  }
+}
