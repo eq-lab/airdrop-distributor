@@ -1,8 +1,9 @@
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
+
 import '@nomicfoundation/hardhat-toolbox';
 import 'hardhat-contract-sizer';
 import './tasks/deploy';
-
-declare var process: any;
 
 const config = {
   solidity: {

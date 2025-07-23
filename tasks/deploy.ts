@@ -49,7 +49,7 @@ type AirdropConfig = {
     airdropTokenStorageAddress: string;
 };
 
-type TestTokenConfig = { name: string; symbol: string };
+type TestTokenConfig = { name: string; symbol: string; decimals?: number };
 
 type ContractDeploymentData = { address: string; txHash?: string };
 type DeploymentData = {
@@ -130,11 +130,12 @@ task("airdrop:deploy", "Deploy AirdropDistributor contract")
         let tokenDeploymentData: ContractDeploymentData | undefined;
 
         if (testTokenDataPresent) {
-            const deployMsg = dryRun ? `\n🪙 Simulating test token deployment: ${config.testToken!.name} (${config.testToken!.symbol})` : `\n🪙 Deploying test token: ${config.testToken!.name} (${config.testToken!.symbol})`;
+            const decimals = config.testToken!.decimals ?? 18;
+            const deployMsg = dryRun ? `\n🪙 Simulating test token deployment: ${config.testToken!.name} (${config.testToken!.symbol}) with ${decimals} decimals` : `\n🪙 Deploying test token: ${config.testToken!.name} (${config.testToken!.symbol}) with ${decimals} decimals`;
             console.log(deployMsg);
 
             const MintableERC20 = await hre.ethers.getContractFactory("MintableERC20");
-            const token = await MintableERC20.deploy(config.testToken!.name, config.testToken!.symbol);
+            const token = await MintableERC20.deploy(config.testToken!.name, config.testToken!.symbol, decimals);
             await token.waitForDeployment();
 
             tokenAddress = await token.getAddress();
@@ -152,7 +153,7 @@ task("airdrop:deploy", "Deploy AirdropDistributor contract")
                 await waitForConfirmationsAndVerify(
                     hre,
                     tokenAddress,
-                    [config.testToken!.name, config.testToken!.symbol],
+                    [config.testToken!.name, config.testToken!.symbol, decimals],
                     "Test Token",
                     confirmations
                 );
