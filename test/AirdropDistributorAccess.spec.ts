@@ -55,17 +55,7 @@ describe('AirdropDistributor access', () => {
   it('airdropToken zero address', async () => {
     const signer = (await ethers.getSigners()).at(0)!;
     const factory = new AirdropDistributor__factory();
-    await expect(
-      factory.connect(signer).deploy(ethers.ZeroAddress, ethers.Wallet.createRandom().address)
-    ).to.be.revertedWith('airdropToken address is zero');
-  });
-
-  it('airdropToken storage zero address', async () => {
-    const signer = (await ethers.getSigners()).at(0)!;
-    const factory = new AirdropDistributor__factory();
-    await expect(
-      factory.connect(signer).deploy(ethers.Wallet.createRandom().address, ethers.ZeroAddress)
-    ).to.be.revertedWith('airdropToken storage address is zero');
+    await expect(factory.connect(signer).deploy(ethers.ZeroAddress)).to.be.revertedWith('airdropToken address is zero');
   });
 
   it('set new manager', async () => {

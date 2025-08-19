@@ -4,27 +4,32 @@ pragma solidity 0.8.24;
 import '@openzeppelin/contracts/access/AccessControl.sol';
 import '@openzeppelin/contracts/access/Ownable2Step.sol';
 import '@openzeppelin/contracts/utils/cryptography/MerkleProof.sol';
-import '@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol';
 
 import './interfaces/IAirdropDistributor.sol';
 
+/// @notice interface for mintable token
+interface IMintableERC20Token {
+  function mint(address recipient, uint256 amount) external;
+}
+
+/**
+ * @title AirdropDistributor
+ * @notice AirdropDistributor is a contract that distributes tokens to airdrop recipients
+ * @dev This contract use mint function to distribute tokens to airdrop recipients
+ */
 contract AirdropDistributor is IAirdropDistributor, AccessControl, Ownable2Step {
   /// @notice manager role which owners can update merkle tree root value
   bytes32 public constant MANAGER_ROLE = keccak256('MANAGER_ROLE');
   /// @notice token address allocated for airdrop
   address public immutable airdropToken;
-  /// @notice address which allocated tokens are transferred from during claim
-  address public immutable airdropTokenStorage;
   /// @notice current merkle root used for proofs verification
   bytes32 public merkleRoot;
   /// @notice stores total amounts each user has already claimed
   mapping(address => uint256) public claimed;
 
-  constructor(address _airdropToken, address _airdropTokenStorage) Ownable(msg.sender) {
+  constructor(address _airdropToken) Ownable(msg.sender) {
     require(_airdropToken != address(0), 'airdropToken address is zero');
-    require(_airdropTokenStorage != address(0), 'airdropToken storage address is zero');
     airdropToken = _airdropToken;
-    airdropTokenStorage = _airdropTokenStorage;
 
     _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _grantRole(MANAGER_ROLE, msg.sender);
@@ -48,7 +53,7 @@ contract AirdropDistributor is IAirdropDistributor, AccessControl, Ownable2Step 
 
     claimed[msg.sender] = amount;
     uint256 claimedAmount = amount - alreadyClaimed;
-    TransferHelper.safeTransferFrom(airdropToken, airdropTokenStorage, msg.sender, claimedAmount);
+    IMintableERC20Token(airdropToken).mint(msg.sender, claimedAmount);
 
     emit Claim(msg.sender, claimedAmount);
   }

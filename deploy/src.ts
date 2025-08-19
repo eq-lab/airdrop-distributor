@@ -11,7 +11,6 @@ type AirdropConfig = {
   nodeUri: string;
   airdropTokenAddress?: string;
   testToken?: TestTokenConfig;
-  airdropTokenStorageAddress: string;
 };
 type TestTokenConfig = { name: string; symbol: string };
 
@@ -77,8 +76,7 @@ class AirdropDeployment extends Command {
 
     const airdropDeploymentData = await this.deployAirdropContract(
       deployer,
-      tokenAddress,
-      configData.airdropTokenStorageAddress
+      tokenAddress
     );
 
     const resultingBalance = await provider.getBalance(deployer.address);
@@ -93,12 +91,11 @@ class AirdropDeployment extends Command {
 
   async deployAirdropContract(
     deployer: ethers.Signer,
-    tokenAddress: string,
-    tokenStorage: string
+    tokenAddress: string
   ): Promise<ContractDeploymentData> {
     console.log(`\nDeploying airdrop contract`);
     const airdropContractFactory = new AirdropDistributor__factory();
-    const airdropContract = await airdropContractFactory.connect(deployer).deploy(tokenAddress, tokenStorage);
+    const airdropContract = await airdropContractFactory.connect(deployer).deploy(tokenAddress);
     await airdropContract.waitForDeployment();
 
     const contractAddress = await airdropContract.getAddress();
@@ -122,7 +119,7 @@ class AirdropDeployment extends Command {
     console.log(`\nToken contract deployed:`);
     console.log(`  address: ${contractAddress}`);
     console.log(`  tx hash: ${deploymentTxHash}`);
-    return { address: contractAddress, txHash:deploymentTxHash };
+    return { address: contractAddress, txHash: deploymentTxHash };
   }
 
   async getProvider(nodeUri: string, dryRun: boolean): Promise<ethers.JsonRpcProvider> {
@@ -152,10 +149,6 @@ class AirdropDeployment extends Command {
 
     if (config.airdropTokenAddress !== undefined && !ethers.isAddress(config.airdropTokenAddress)) {
       throw new Error(`airdropTokenAddress has invalid value: ${config.airdropTokenAddress}`);
-    }
-
-    if (!ethers.isAddress(config.airdropTokenStorageAddress)) {
-      throw new Error(`airdropTokenStorageAddress has invalid value: ${config.airdropTokenStorageAddress}`);
     }
 
     return config;

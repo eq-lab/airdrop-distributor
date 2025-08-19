@@ -10,9 +10,6 @@ describe('AirdropDistributorClaim success', () => {
     const { airdropDistributor, token, owner } = await loadFixture(createAirdrop);
     const [_, user] = await ethers.getSigners();
 
-    const tokenStorage = await airdropDistributor.airdropTokenStorage();
-    const storageBalanceBefore = await token.balanceOf(tokenStorage);
-
     const airdropData = generateRandomAirdropData(9);
     const userAmount = parseUnits('100', 18);
     airdropData.push({ address: user.address, amount: userAmount });
@@ -24,19 +21,12 @@ describe('AirdropDistributorClaim success', () => {
     await airdropDistributor.connect(user).claim(userAmount, userProof);
 
     expect(await token.balanceOf(user.address)).to.be.eq(userAmount);
-
-    const storageBalanceCurrent = await token.balanceOf(tokenStorage);
-    expect(storageBalanceBefore - storageBalanceCurrent).to.be.eq(userAmount);
-
     expect(await airdropDistributor.claimed(user.address)).to.be.eq(userAmount);
   });
 
   it('claim twice with root update', async () => {
     const { airdropDistributor, token, owner } = await loadFixture(createAirdrop);
     const [_, user] = await ethers.getSigners();
-
-    const tokenStorage = await airdropDistributor.airdropTokenStorage();
-    const storageBalanceBefore = await token.balanceOf(tokenStorage);
 
     const airdropData = generateRandomAirdropData(9);
     const userAmount = parseUnits('100', 18);
@@ -59,10 +49,6 @@ describe('AirdropDistributorClaim success', () => {
     await airdropDistributor.connect(user).claim(newUserAmount, newUserProof);
 
     expect(await token.balanceOf(user.address)).to.be.eq(newUserAmount);
-
-    const storageBalanceCurrent = await token.balanceOf(tokenStorage);
-    expect(storageBalanceBefore - storageBalanceCurrent).to.be.eq(newUserAmount);
-
     expect(await airdropDistributor.claimed(user.address)).to.be.eq(newUserAmount);
   });
 });
